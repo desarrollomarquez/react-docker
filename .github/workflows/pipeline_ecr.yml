@@ -11,18 +11,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCES_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: Login to Amazon ECR.
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, Tag, and Push the image frontend to Amazon ECR AIOI Fullstack
-        id: build-image
+      - name: Change something
         run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
-          docker build . --file Dockerfile --tag ${{ secrets.AWS_ECR_URL_FRONTEND }}:latest
-          docker push ${{ secrets.AWS_ECR_URL_FRONTEND }}:latest
+          find . -type f -name "*.md" -print0 | xargs -0 sed -i "s/foo/bar/g"
+
