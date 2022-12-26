@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         env:
-          FULL_NAME_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          FULL_NAME_REPO: ${{ github.event.number }}
       - name: Change something
         run: |
           echo $FULL_NAME_REPO 
