@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Bienvendo App Backend Test - Docker Image for AWS
+          Bienvendo App Backend Test - Docker Image for AWS...
         </p>
       </header>
     </div>
