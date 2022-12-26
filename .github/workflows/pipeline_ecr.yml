@@ -11,11 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        env:
-          FULL_NAME_REPO: ${{ github.event.number }}
-      - name: Change something
-        run: |
-          echo $FULL_NAME_REPO 
+      - name: print
+        run: echo ${{ github.event.number }}
 
 
 
