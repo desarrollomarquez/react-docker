@@ -11,20 +11,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCES_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR.
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, Tag, and Push the image frontend to Amazon ECR AIOI Fullstack
+        id: build-image
         run: |
-          echo "$GITHUB_CONTEXT"
-      - name: Create issue using REST API
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/issues \
-          --header 'authorization: Bearer ${{ secrets.GITHUBTOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{
-            "title": "Automated issue for commit: ${{ github.sha }}",
-            "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_."
-            }' \
-          --fail
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
+          docker build . --file Dockerfile --tag ${{ secrets.AWS_ECR_URL_FRONTEND }}:latest
+          docker push ${{ secrets.AWS_ECR_URL_FRONTEND }}:latest
 
