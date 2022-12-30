@@ -14,5 +14,5 @@ FROM nginx:alpine
 COPY --from=clientBuilder  /client/default.conf ./etc/nginx/conf.d/default.conf
 #COPY --from=clientBuilder /../deployment/utils/default.conf ./etc/nginx/conf.d/default.conf
 COPY --from=clientBuilder /client/build/ /var/www/build/
-EXPOSE 80
+EXPOSE 3000
 CMD ["nginx", "-g", "daemon off;"]
