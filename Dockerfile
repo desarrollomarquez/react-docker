@@ -1,7 +1,7 @@
 # Base image
-FROM node:16.15.1-slim as clientBuilder
+FROM node:18-alpine as appBuilder
 
-WORKDIR /client/
+WORKDIR /app/
 
 RUN npm add yarn
 COPY package*.json ./
@@ -9,10 +9,12 @@ RUN yarn install --production && yarn cache clean
 COPY . .
 RUN yarn build
 
-
-FROM nginx:alpine
-COPY --from=clientBuilder  /client/default.conf ./etc/nginx/conf.d/default.conf
-#COPY --from=clientBuilder /../deployment/utils/default.conf ./etc/nginx/conf.d/default.conf
-COPY --from=clientBuilder /client/build/ /var/www/build/
 EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+# Start the server using the production build
+CMD [ "yarn", "start" ]
+
+#FROM nginx:alpine
+#COPY --from=appBuilder  /app/default.conf ./etc/nginx/conf.d/default.conf
+#COPY --from=appBuilder /app/build/ /var/www/build/
+#EXPOSE 3000
+#CMD ["nginx", "-g", "daemon off;"]
