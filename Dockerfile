@@ -9,7 +9,7 @@ RUN yarn install --production && yarn cache clean
 COPY . .
 RUN yarn build
 
-EXPOSE 3000
+EXPOSE 80
 # Start the server using the production build
 CMD [ "yarn", "start" ]
 
